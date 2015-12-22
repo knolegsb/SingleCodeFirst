@@ -8,6 +8,8 @@ using System.Web;
 using System.Web.Mvc;
 using SingleCodeFirst.DAL;
 using SingleCodeFirst.Models;
+using System.Data.Entity.Infrastructure;
+using PagedList;
 
 namespace SingleCodeFirst.Controllers
 {
@@ -16,9 +18,37 @@ namespace SingleCodeFirst.Controllers
         private StudentContext db = new StudentContext();
 
         // GET: Students
-        public ActionResult Index()
+        public ActionResult Index(string searchString, string currentFilter, int? page, string sortOrder)
         {
-            return View(db.Students.ToList());
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+            ViewBag.CurrentFilter = searchString;
+
+            var students = from s in db.Students select s;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                students = students.Where(s => s.Name.Contains(searchString));
+            }
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    students = students.OrderByDescending(s => s.Name);
+                    break;
+                default:
+                    students = students.OrderBy(s => s.Name);
+                    break;
+            }
+
+            int pageSize = 3;
+            int pageNumber = (page ?? 1);
+            return View(students.ToPagedList(pageNumber, pageSize));
         }
 
         // GET: Students/Details/5
