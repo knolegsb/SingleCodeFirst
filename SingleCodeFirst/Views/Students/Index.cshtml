@@ -10,37 +10,50 @@
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
-<table class="table">
-    <tr>
-        <th>
+<table id="serverTable" class="table table-striped table-bordered table-hover" cellpadding="0" cellspacing="0" width="100%" >
+    <tr class="row">
+        <th class="col-md-3">
             @Html.DisplayNameFor(model => model.Name)
         </th>
-        <th>
+        <th class="col-md-3">
             @Html.DisplayNameFor(model => model.Status)
         </th>
-        <th>
+        <th class="col-md-3">
             @Html.DisplayNameFor(model => model.Grade)
         </th>
-        <th></th>
+        <th class="col-md-3">Actions</th>
     </tr>
 
 @foreach (var item in Model) {
-    <tr>
-        <td>
+    <tr class="row">
+        <td class="col-md-3">
             @Html.DisplayFor(modelItem => item.Name)
         </td>
-        <td>
+        <td class="col-md-3">
             @Html.DisplayFor(modelItem => item.Status)
         </td>
-        <td>
+        <td class="col-md-3">
             @Html.DisplayFor(modelItem => item.Grade)
         </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.StudentId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.StudentId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.StudentId })
+        <td class="col-md-3 col-xs-3">
+            @Html.ActionLink("Edit", "Edit", new { id=item.StudentId }, new { @class = "btn btn-default" }) 
+            @Html.ActionLink("Details", "Details", new { id=item.StudentId }, new { @class = "btn btn-default" }) 
+            @Html.ActionLink("Delete", "Delete", new { id=item.StudentId }, new { @class = "btn btn-default" })
         </td>
     </tr>
 }
 
 </table>
+
+@section scripts
+{
+    <script src="//cdn.datatables.net/1.10.6/js/jquery.dataTables.min.js"></script>
+}
+
+<script>
+    $(function () {
+        var table = $('#serverTable').dataTable({
+
+        })
+    })
+</script>
